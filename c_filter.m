@@ -2,13 +2,13 @@ close all
 
 
 %% Inputs
-I = imread('people.jpg');
+I = imread('image/flower.jpg');
 [n,m,dim] = size(I);
 areaMag = numel(num2str(n*m));
 sharpness = 2;    % criteria for gradient (1.01 to 2)
 smoothness = .04; % higher is more blurr (0.001 to 0.1)
 thickness = 1;  % edge thickness (0 to 20)
-edge_thresh = 0.2;  % threshhold to keep edges (0-1)
+edge_thresh = 0.3;  % threshhold to keep edges (0-1)
 minArea = 500;
 max_beta = 100000;
 
@@ -59,7 +59,7 @@ figure; imshow(S); title('Smooth')
 
 %% Edge detection
 E = edge(rgb2gray(I), 'Sobel');%, edge_thresh);
-BW = bwareaopen(E , 50); % remove white noise < minArea
+BW = bwareaopen(E , 100); % remove white noise < minArea
 se = strel('disk',thickness);        
 erode = double(imerode(~BW, se));
 figure; imshow(erode); title('Edge')
