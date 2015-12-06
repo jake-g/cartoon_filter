@@ -2,14 +2,14 @@ close all
 
 
 %% Inputs
-I = imread('image/flower.jpg');
+I = imread('images/flower.jpg');
 [n,m,dim] = size(I);
 areaMag = numel(num2str(n*m));
-sharpness = 2;    % criteria for gradient (1.01 to 2)
-smoothness = .04; % higher is more blurr (0.001 to 0.1)
-thickness = 1;  % edge thickness (0 to 20)
-edge_thresh = 0.3;  % threshhold to keep edges (0-1)
-minArea = 500;
+sharpness = 1.5;    % criteria for gradient (1.01 to 2)
+smoothness = .05; % higher is more blurr (0.001 to 0.1)
+thickness = 2;  % edge thickness (0 to 20)
+% edge_thresh = 0.3;  % threshhold to keep edges (0-1)
+minArea = 100;
 max_beta = 100000;
 
 % sm_constants = [.001 .005, .007, .01, .05, .07, .1];
@@ -58,23 +58,25 @@ figure; imshow(S); title('Smooth')
 % end
 
 %% Edge detection
-E = edge(rgb2gray(I), 'Sobel');%, edge_thresh);
-BW = bwareaopen(E , 100); % remove white noise < minArea
-se = strel('disk',thickness);        
+scale = n/1000 % used to work with different sizes
+E = edge(rgb2gray(I), 'Sobel');
+BW = bwareaopen(E , round(minArea * scale)); % remove white noise < minArea
+se = strel('disk',round(thickness * scale));        
 erode = double(imerode(~BW, se));
-figure; imshow(erode); title('Edge')
+se2 = strel('line',round(9* scale), 90);
+dilate = imdilate(erode,se2);
+figure; imshow(dilate); title('Edge')
 hsv = rgb2hsv(S); 
 
-    % Modify Colors
+
+
+% Modify Colors
 for i = 1:3
-    S(:, :, i) = S(:, :, i).*erode; % apply weight
+    S(:, :, i) = S(:, :, i).*dilate; % apply weight
 end
-%     
-% V = erode.*hsv(:, :, 3);
-% hsv = [hsv(:,:,1), hsv(:,:,2), V];
-% rgb = hsv2rgb(hsv);
+
 figure; imshow(S); title('rgb');
 
-% figure; imshow(hsv(:,:,3)); title('rgb');
+
 
 
