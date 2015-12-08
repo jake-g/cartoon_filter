@@ -218,7 +218,6 @@ global hAxes2;
 hObject = findobj(gcf, 'Tag', 'effect');
 str = get(hObject, 'String');
 val = get(hObject,'Value');
-mode = str(val);
 
 % get inv option
 hObject = findobj(gcf, 'Tag', 'inv');
