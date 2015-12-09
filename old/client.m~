@@ -1,9 +1,0 @@
-% clear all; close all; clc
-
-input = 'images/suit.jpg';
-
-% function [ out ] = cartoon( in, bitdepth, smoothness, thickness, edge_thresh, detail  )
-[out, map] = cartoon(input, 24, 0.02, 2, 900, 9, 90);
-
-figure
-imshow(out, map)

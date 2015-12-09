@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 08-Dec-2015 04:22:04
+% Last Modified by GUIDE v2.5 08-Dec-2015 16:20:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -55,7 +55,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-clear all
+clear all; 
 reset;
 
 
@@ -156,10 +156,13 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
+% -----------------------------------------TOOOOOOOOOOOOODOOOOOOOOOOOO----------------
 % --- Executes on button press in save.
 function save_Callback(hObject, eventdata, handles)
 
+
+% --- Executes on button press in black.
+function black_Callback(hObject, eventdata, handles)
 
 % --- Executes on slider movement.
 function thickness_Callback(hObject, eventdata, handles)
@@ -200,7 +203,8 @@ end
 % --- Executes on button press in inv.
 function inv_Callback(hObject, eventdata, handles)
 
-% Hint: get(hObject,'Value') returns toggle state of inv
+% --- Executes on button press in morph.
+function morph_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in reset.
 function reset_Callback(hObject, eventdata, handles)
@@ -216,8 +220,11 @@ global hAxes2;
 
 % get effect effect
 hObject = findobj(gcf, 'Tag', 'effect');
-str = get(hObject, 'String');
 val = get(hObject,'Value');
+
+% get morph option
+hObject = findobj(gcf, 'Tag', 'morph');
+morph = get(hObject, 'Value')
 
 % get inv option
 hObject = findobj(gcf, 'Tag', 'inv');
@@ -253,7 +260,7 @@ angle = get(hSlider,'Value');
 set(gcf, 'CurrentAxes', hAxes2);
 tic
 if val == 1
-    out = cartoon(X, smooth, detail, color, thick, length, angle);
+    out = cartoon(X, smooth, detail, color, thick,  morph, length, angle);
     if inv 
         out = 1-out;
     end
@@ -262,12 +269,8 @@ if val == 1
     end
     imshow(out);
 else    % Simple black and white effect
-    BnW( X , detail, color, thick, length, angle, inv, black ) 
+    BnW( X , detail, color, thick, length, angle,  morph, inv, black ) 
 end
 disp('DONE')
 toc
 return;
-
-
-% --- Executes on button press in black.
-function black_Callback(hObject, eventdata, handles)
