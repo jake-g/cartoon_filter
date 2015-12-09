@@ -24,7 +24,7 @@ denoise = repmat(denoise,[1,1,dim]);    % make RGB dimension
 
 beta = 2*smoothness;
 while beta < max_beta
-    % Smooth
+    % Smooth high frequency details and color
     h = [diff(S,1,2), S(:,1,:) - S(:,end,:)];
     v = [diff(S,1,1); S(1,:,:) - S(end,:,:)];
     t = sum((h.^2+v.^2),3)<smoothness/beta;
@@ -33,9 +33,9 @@ while beta < max_beta
     
     % Retain Edges
     curr_denoise   = 1 + beta*denoise;
-    Normin2 = [h(:,end,:) - h(:, 1,:), -diff(h,1,2)];
-    Normin2 = Normin2 + [v(end,:,:) - v(1, :,:); -diff(v,1,1)];
-    FS = (I_fft + beta*fft2(Normin2))./curr_denoise;
+    curr_min = [h(:,end,:) - h(:, 1,:), - diff(h,1,2)];
+    curr_min = curr_min + [v(end,:,:) - v(1, :,:); - diff(v,1,1)];
+    FS = (I_fft + beta*fft2(curr_min))./curr_denoise;
     S = real(ifft2(FS));
     beta = beta*sharpness;
 end
