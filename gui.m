@@ -269,8 +269,11 @@ if val == 1
     end
     imshow(out);
 else    % Simple black and white effect
-    BnW( X , detail, color, thick, length, angle,  morph, inv, black ) 
+    bw( X , detail, color, thick, length, angle,  morph, inv, black ) 
 end
 disp('DONE')
 toc
 return;
+
+
+%% TODO, make morph toggle erosion AND dilation, reset button, better hue colors?
