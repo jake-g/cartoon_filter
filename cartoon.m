@@ -1,4 +1,4 @@
-function [ out ] = cartoon( I, smoothness, detail, bitdepth, thickness, morph, morph_len, morph_ang  )
+function [ out ] = cartoon( I, smoothness, detail, bitdepth, thickness, morph, morph_len, morph_ang, dither  )
 %cartoon will apply a carton type effect on the input image. It has
 %functionality for addition effects too.
 
@@ -47,20 +47,25 @@ E = edge(rgb2gray(I), 'Sobel');
 BW = bwareaopen(E , round(minArea * scale)); % remove white noise < minArea
 
 % Morphalogical Functions
-se = strel('disk',round(thickness * scale));  
-    erode = double(imerode(~BW, se));
+
 if morph
+    se = strel('disk',round(thickness * scale));  
+    erode = double(imerode(~BW, se));
     se2 = strel('line',round(morph_len* scale), morph_ang);
     morphed = imdilate(erode,se2);
 else
-    morphed = erode;
+    morphed = 1;
 end
 for i = 1:3
     S(:, :, i) = S(:, :, i).*morphed; % apply weight
 end
 
 % Quantize color
-[S,map]= rgb2ind(S,bitdepth,'nodither');
+if dither
+    [S,map]= rgb2ind(S,bitdepth,'dither');
+else
+    [S,map]= rgb2ind(S,bitdepth,'nodither');
+end
 out = ind2rgb(S, map);
 
 end

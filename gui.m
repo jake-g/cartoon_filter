@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 08-Dec-2015 16:20:50
+% Last Modified by GUIDE v2.5 09-Dec-2015 16:45:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -67,7 +67,6 @@ function varargout = gui_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 function reset
-clear out
 global hAxes1;
 global hAxes2;
 if (isempty(hAxes1))
@@ -90,7 +89,7 @@ function load_Callback(hObject, eventdata, handles)
 global X;
 global hAxes1;
 % open an image
-[FileName,PathName] = uigetfile('*.bmp;*.tif;*.jpg;*.hdf','Select the image file');
+[FileName,PathName] = uigetfile('*.bmp;*.tif;*.jpg;*.png;*.hdf','Select the image file');
 FullPathName = [PathName,'/',FileName];
 X = imread(FullPathName);
 
@@ -156,10 +155,17 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-% -----------------------------------------TOOOOOOOOOOOOODOOOOOOOOOOOO----------------
 % --- Executes on button press in save.
 function save_Callback(hObject, eventdata, handles)
-
+%     set(gcf, 'CurrentAxes', hAxes1);
+%     fig = get(gcf,'CurrentAxes');
+%     saveas(fig,'output.jpg')
+    disp('SAVE')
+    F = getframe(gcf);
+    image(F.cdata);
+    imwrite(F.cdata, 'file.jpg');
+return
+        
 
 % --- Executes on button press in black.
 function black_Callback(hObject, eventdata, handles)
@@ -206,10 +212,12 @@ function inv_Callback(hObject, eventdata, handles)
 % --- Executes on button press in morph.
 function morph_Callback(hObject, eventdata, handles)
 
+% --- Executes on button press in dither.
+function dither_Callback(hObject, eventdata, handles)
+
 % --- Executes on button press in reset.
 function reset_Callback(hObject, eventdata, handles)
 reset;
-clear all;
 
 
 % --- Executes on button press in apply.
@@ -224,7 +232,11 @@ val = get(hObject,'Value');
 
 % get morph option
 hObject = findobj(gcf, 'Tag', 'morph');
-morph = get(hObject, 'Value')
+morph = get(hObject, 'Value');
+
+% get dither option
+hObject = findobj(gcf, 'Tag', 'dither');
+dither = get(hObject, 'Value');
 
 % get inv option
 hObject = findobj(gcf, 'Tag', 'inv');
@@ -260,7 +272,7 @@ angle = get(hSlider,'Value');
 set(gcf, 'CurrentAxes', hAxes2);
 tic
 if val == 1
-    out = cartoon(X, smooth, detail, color, thick,  morph, length, angle);
+    out = cartoon(X, smooth, detail, color, thick,  morph, length, angle, dither);
     if inv 
         out = 1-out;
     end
@@ -268,12 +280,17 @@ if val == 1
         out = rgb2gray(out);
     end
     imshow(out);
+
 else    % Simple black and white effect
     bw( X , detail, color, thick, length, angle,  morph, inv, black ) 
+%     F = getframe(gcf);
+%     image(F.cdata);
+%     imshow(F.cdata)
+%     imwrite(F.cdata, 'file.jpg');
 end
 disp('DONE')
 toc
 return;
 
 
-%% TODO, make morph toggle erosion AND dilation, reset button, Save as JPG better hue colors?
+

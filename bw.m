@@ -22,14 +22,21 @@ end
 scale = n/1000; % used to work with different sizes
 BW = bwareaopen(BW , round(minArea * scale)); % remove white noise < minArea
 se = strel('line',round(morph_len* scale), morph_ang);
-if inv == 0      % invert if arg passed
-    dilate = imdilate(BW,se);   
-else 
-    dilate = imdilate(~BW,se);
+if morph 
+    
+    if inv == 0      % invert if arg passed
+        morphed = imdilate(BW,se);   
+    else 
+        morphed = imdilate(~BW,se);
+    end
+else
+    if inv
+        morphed = ~BW;
+    end
 end
 
 % Apply Effects
-BW = BW.*dilate;
+BW = BW.*morphed;
 RGB = double(cat(3, BW.*R, BW.*G, BW.*B));
 imshow(RGB); hold on;
 
