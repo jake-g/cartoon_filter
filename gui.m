@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 09-Dec-2015 16:45:11
+% Last Modified by GUIDE v2.5 10-Dec-2015 02:21:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -157,13 +157,14 @@ end
 
 % --- Executes on button press in save.
 function save_Callback(hObject, eventdata, handles)
+global out
 %     set(gcf, 'CurrentAxes', hAxes1);
 %     fig = get(gcf,'CurrentAxes');
 %     saveas(fig,'output.jpg')
-    disp('SAVE')
-    F = getframe(gcf);
-    image(F.cdata);
-    imwrite(F.cdata, 'file.jpg');
+%     disp('SAVE')
+%     F = getframe(gcf);
+%     image(F.cdata);
+    imwrite(out, 'file.png');
 return
         
 
@@ -269,6 +270,7 @@ hSlider = findobj(gcf, 'Tag', 'angle');
 angle = get(hSlider,'Value');
 
 % show the result
+global out
 set(gcf, 'CurrentAxes', hAxes2);
 tic
 if val == 1
@@ -285,12 +287,10 @@ else    % Simple black and white effect
     bw( X , detail, color, thick, length, angle,  morph, inv, black ) 
 %     F = getframe(gcf);
 %     image(F.cdata);
+%% 
 %     imshow(F.cdata)
 %     imwrite(F.cdata, 'file.jpg');
 end
 disp('DONE')
 toc
 return;
-
-
-
