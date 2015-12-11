@@ -1,28 +1,8 @@
 function varargout = gui(varargin)
 %GUI M-file for gui.fig
-%      GUI, by itself, creates a new GUI or raises the existing
-%      singleton*.
-%
-%      H = GUI returns the handle to a new GUI or the handle to
-%      the existing singleton*.
-%
-%      GUI('Property','Value',...) creates a new GUI using the
-%      given property value pairs. Unrecognized properties are passed via
-%      varargin to gui_OpeningFcn.  This calling syntax produces a
-%      warning when there is an existing singleton*.
-%
-%      GUI('CALLBACK') and GUI('CALLBACK',hObject,...) call the
-%      local function named CALLBACK in GUI.M with the given input
-%      arguments.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help gui
-
-% Last Modified by GUIDE v2.5 10-Dec-2015 02:21:00
+%      
+% Gui for Cartoon effect
+% Jake Garrison
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,7 +37,6 @@ guidata(hObject, handles);
 % uiwait(handles.figure1);
 clear all; 
 reset;
-
 
 % --- Outputs from this function are returned to the command line.
 function varargout = gui_OutputFcn(hObject, eventdata, handles)
@@ -101,14 +80,12 @@ disp('LOAD')
 % --- Executes on selection change in effect.
 function effect_Callback(hObject, eventdata, handles)
 
-
 % --- Executes during object creation, after setting all properties.
 function effect_CreateFcn(hObject, eventdata, handles)
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
 
 % --- Executes on slider movement.
 function smoothness_Callback(hObject, eventdata, handles)
@@ -120,7 +97,6 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
 % --- Executes on slider movement.
 function smoothing_Callback(hObject, eventdata, handles)
 
@@ -131,10 +107,8 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
 % --- Executes on slider movement.
 function detail_Callback(hObject, eventdata, handles)
-
 
 % --- Executes during object creation, after setting all properties.
 function detail_CreateFcn(hObject, eventdata, handles)
@@ -143,10 +117,8 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
 % --- Executes on slider movement.
 function color_Callback(hObject, eventdata, handles)
-
 
 % --- Executes during object creation, after setting all properties.
 function color_CreateFcn(hObject, eventdata, handles)
@@ -158,22 +130,14 @@ end
 % --- Executes on button press in save.
 function save_Callback(hObject, eventdata, handles)
 global out
-%     set(gcf, 'CurrentAxes', hAxes1);
-%     fig = get(gcf,'CurrentAxes');
-%     saveas(fig,'output.jpg')
-%     disp('SAVE')
-%     F = getframe(gcf);
-%     image(F.cdata);
     imwrite(out, 'file.png');
-return
-        
+return       
 
 % --- Executes on button press in black.
 function black_Callback(hObject, eventdata, handles)
 
 % --- Executes on slider movement.
 function thickness_Callback(hObject, eventdata, handles)
-
 
 % --- Executes during object creation, after setting all properties.
 function thickness_CreateFcn(hObject, eventdata, handles)
@@ -182,10 +146,8 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
 % --- Executes on slider movement.
 function length_Callback(hObject, eventdata, handles)
-
 
 % --- Executes during object creation, after setting all properties.
 function length_CreateFcn(hObject, eventdata, handles)
@@ -194,11 +156,8 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
 % --- Executes on slider movement.
 function angle_Callback(hObject, eventdata, handles)
-
-
 
 % --- Executes during object creation, after setting all properties.
 function angle_CreateFcn(hObject, eventdata, handles)
@@ -219,7 +178,6 @@ function dither_Callback(hObject, eventdata, handles)
 % --- Executes on button press in reset.
 function reset_Callback(hObject, eventdata, handles)
 reset;
-
 
 % --- Executes on button press in apply.
 function apply_Callback(hObject, eventdata, handles)
@@ -273,7 +231,7 @@ angle = get(hSlider,'Value');
 global out
 set(gcf, 'CurrentAxes', hAxes2);
 tic
-if val == 1
+if val == 1 % Cartoon Mode
     out = cartoon(X, smooth, detail, color, thick,  morph, length, angle, dither);
     if inv 
         out = 1-out;
@@ -281,15 +239,11 @@ if val == 1
     if black
         out = rgb2gray(out);
     end
-    imshow(out);
+    imshow(out);    % display
 
 else    % Simple black and white effect
     bw( X , detail, color, thick, length, angle,  morph, inv, black ) 
-%     F = getframe(gcf);
-%     image(F.cdata);
-%% 
-%     imshow(F.cdata)
-%     imwrite(F.cdata, 'file.jpg');
+
 end
 disp('DONE')
 toc
